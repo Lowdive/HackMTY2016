@@ -7,6 +7,7 @@
 package GameState;
 
 
+import Entidades.Jugador;
 import Main.GamePanel;
 import TileMap.Background;
 import TileMap.Tile;
@@ -27,6 +28,8 @@ public class Nivel1State extends GameState {
     //creando variables tileMap y background
     private TileMap tileMap;
     private Background bg;
+    
+    private Jugador player;
     
     
     // EVENTOS
@@ -60,6 +63,12 @@ public class Nivel1State extends GameState {
         bg = new Background("/Resources/Fondos/BGBetter.png", 1);
         bg.setVector(0, 0);
         
+        //init player
+        player = new Jugador(tileMap);
+        player.setPosition(100, 400);
+        
+       
+        
         //Inicializando el evento de inicio
         boolEventoStart = true;
         arrTransiciones = new ArrayList<Rectangle>();
@@ -84,6 +93,8 @@ public class Nivel1State extends GameState {
         //dibujando tilemap
         tileMap.draw(g);
         
+        player.draw(g);
+        
         //dibujando las transiciones
         g.setColor(Color.BLACK);
         for(int i = 0; i < arrTransiciones.size(); i++) {
@@ -93,16 +104,57 @@ public class Nivel1State extends GameState {
 
     @Override
     public void update() {
+        player.update();
         
+        //Actualizando la posicion del mapa dependiendo la del personaje Osmy
+        tileMap.setPosition(GamePanel.WIDTH / 2 - player.getX(),
+                GamePanel.HEIGHT / 2 - player.getY());
+        //Actualizando los efectos especiales del mapa
+        tileMap.update();
+        tileMap.fixBounds();
+        
+        bg.setPosition(tileMap.getX(), tileMap.getY());
         
     }
     
     @Override
     public void keyPressed(int k) {
+        if(k == KeyEvent.VK_A) {
+            player.setLeft(true);
+        }
+        if(k == KeyEvent.VK_D) {
+            player.setRight(true);
+        }
+        if(k == KeyEvent.VK_W) {
+            player.setUp(true);
+        }
+        if(k == KeyEvent.VK_S) {
+            player.setDown(true);
+        }
+        if(k == KeyEvent.VK_SPACE) {
+            player.setFlying(true);
+        }
     }
 
     @Override
     public void keyReleased(int k) {
+        
+        //Poniendo el falso las variables de movimiento cuando no se presionan.
+        if(k == KeyEvent.VK_A) {
+            player.setLeft(false);
+        }
+        if(k == KeyEvent.VK_D) {
+            player.setRight(false);
+        }
+        if(k == KeyEvent.VK_W) {
+            player.setUp(false);
+        }
+        if(k == KeyEvent.VK_S) {
+            player.setDown(false);
+        }
+        if(k == KeyEvent.VK_SPACE) {
+            player.setFlying(false);
+        }
     }
     
     /*
