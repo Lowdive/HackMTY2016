@@ -59,7 +59,11 @@ public class Nivel1State extends GameState {
         //Estableciendo el background
         bg = new Background("/Resources/Fondos/BGBetter.png", 1);
         bg.setVector(0, 0);
-
+        
+        //Inicializando el evento de inicio
+        boolEventoStart = true;
+        arrTransiciones = new ArrayList<Rectangle>();
+        //eventoStart();
         
  
     }
@@ -67,10 +71,10 @@ public class Nivel1State extends GameState {
     /*POPULATE ENEMIES
         Funcion que pone a los enemigos en la posicion donde deben de estar
         dentro del mapa*/
-    private void populateEnemies() {
-        
-        
-    }
+//    private void populateEnemies() {
+//        
+//        
+//    }
     
     @Override
     public void draw(Graphics2D g) {
