@@ -18,7 +18,7 @@ import javax.imageio.ImageIO;
 public class Jugador extends Objeto {
     
     //vars health
-    private int iHealth;
+    public int iHealth;
     private int iMaxHealth;
     private boolean boolDead;
     
@@ -29,7 +29,12 @@ public class Jugador extends Objeto {
     //vars flying
     private double dFlySpeed;
     private boolean boolFlying;
-            
+    
+    //vars sliding
+    private double dSlideSpeed;
+    private boolean boolSliding;
+    private long longSlidingTimer;
+    
     //fuel for flying
     public double dFuel;
     
@@ -64,13 +69,14 @@ public class Jugador extends Objeto {
         iColWidth = 49;
         
         //init movement variables
-        dMoveSpeed = 3.3;
-        dMaxSpeed = 4.0;
-        dStopSpeed = 0.4;
+        dMoveSpeed = 7.0;
+        dMaxSpeed = 7.5;
+        dStopSpeed = 0.8;
         dStopJumpSpeed = 0.3;
-        dFallSpeed = 0.25;
+        dFallSpeed = 0.45;
         dJumpStart = -7;
-        dFlySpeed = 0.5;
+        dFlySpeed = .5;
+        dSlideSpeed = 4;
         
         //init energy
         dFuel = 5;
@@ -119,6 +125,15 @@ public class Jugador extends Objeto {
         this.boolFlying = b;
     }
     
+    public void setSliding(boolean b) {
+        this.boolSliding = b;
+        longSlidingTimer = System.nanoTime();
+    }
+    
+    public int getFuel() {
+        return (int) Math.round(dFuel);
+    }
+    
     public void reset() {
         iHealth = iMaxHealth;
         boolFacingRight = true;
@@ -136,6 +151,15 @@ public class Jugador extends Objeto {
     }
     
     private void getNextPosition() {
+        if(boolSliding){
+            if(boolFacingRight){
+                dDx += dSlideSpeed;
+            } else {
+                dDx -= dSlideSpeed;
+            }
+        } else {
+            dDx = dDx;
+        }
         //movimiento
         if(boolLeft) {
             dDx -= dMoveSpeed;
@@ -167,6 +191,7 @@ public class Jugador extends Objeto {
         //flying
         if(boolFlying) {
             if(dFuel > 0) {
+                dFuel -= .2;
                 dDy -= dFlySpeed;
             }
         } else if(boolFalling) {
@@ -177,17 +202,38 @@ public class Jugador extends Objeto {
         }
     }
     
+    public void checkAttack(ArrayList<Enemigo> enemigos) {
+        //Recorriendo los enemigos
+        for (int i=0; i < enemigos.size(); i++) {
+            Enemigo e = enemigos.get(i);
+            
+            if(intersects(e)) {
+                hit(e.getDamage());
+            }
+        }        
+    }
+    
     public void update() {
         getNextPosition();
         checkTileMapCollision();
         setPosition(dXtemp, dYtemp);
+        if(boolFlying == false){
+            if(dFuel < 5){
+                dFuel += .03;
+            }
+        }
         
-        dFuel += .5;
+        if(boolSliding){
+            long elapsed = (System.nanoTime() - longSlidingTimer) / 1000000;
+            if(elapsed > 100) {
+                boolSliding = false;
+            }
+        }
         
         //checking invulnerability
         if (boolFlinching) {
            long elapsed = (System.nanoTime() - longFlinchTimer) / 1000000;
-           if (elapsed > 1000) {
+           if (elapsed > 500) {
                boolFlinching = false;
            }
         }

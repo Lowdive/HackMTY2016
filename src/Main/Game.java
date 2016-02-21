@@ -12,7 +12,7 @@ import static javax.swing.JFrame.EXIT_ON_CLOSE;
 public class Game {
     public static void main(String [] args) {
         
-        JFrame window = new JFrame("Spirits of the Forest");
+        JFrame window = new JFrame("HackMTY");
         window.setContentPane(new GamePanel());
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);

@@ -1,12 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package GameState;
 
-
+import Entidades.HUD;
 import Entidades.Jugador;
 import Main.GamePanel;
 import TileMap.Background;
@@ -19,17 +13,13 @@ import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-/**
- *
- * @author MarioDiaz
- */
 public class Nivel1State extends GameState {
     
     //creando variables tileMap y background
     private TileMap tileMap;
     private Background bg;
-    
     private Jugador player;
+    private HUD hud;
     
     
     // EVENTOS
@@ -67,7 +57,8 @@ public class Nivel1State extends GameState {
         player = new Jugador(tileMap);
         player.setPosition(100, 400);
         
-       
+        //init HUD
+        hud = new HUD(player);
         
         //Inicializando el evento de inicio
         boolEventoStart = true;
@@ -76,14 +67,6 @@ public class Nivel1State extends GameState {
         
  
     }
-    
-    /*POPULATE ENEMIES
-        Funcion que pone a los enemigos en la posicion donde deben de estar
-        dentro del mapa*/
-//    private void populateEnemies() {
-//        
-//        
-//    }
     
     @Override
     public void draw(Graphics2D g) {
@@ -94,6 +77,8 @@ public class Nivel1State extends GameState {
         tileMap.draw(g);
         
         player.draw(g);
+        
+        hud.draw(g);
         
         //dibujando las transiciones
         g.setColor(Color.BLACK);
@@ -128,11 +113,12 @@ public class Nivel1State extends GameState {
         if(k == KeyEvent.VK_W) {
             player.setUp(true);
         }
-        if(k == KeyEvent.VK_S) {
-            player.setDown(true);
-        }
         if(k == KeyEvent.VK_SPACE) {
-            player.setFlying(true);
+            if(player.getFuel() > 1){
+                player.setFlying(true);
+            } else {
+                player.setFlying(false);
+            }
         }
     }
 
@@ -145,12 +131,13 @@ public class Nivel1State extends GameState {
         }
         if(k == KeyEvent.VK_D) {
             player.setRight(false);
+            
         }
         if(k == KeyEvent.VK_W) {
             player.setUp(false);
         }
         if(k == KeyEvent.VK_S) {
-            player.setDown(false);
+            player.setSliding(true);
         }
         if(k == KeyEvent.VK_SPACE) {
             player.setFlying(false);
