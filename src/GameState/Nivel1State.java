@@ -1,5 +1,6 @@
 package GameState;
 
+import Entidades.Enemigos.EnemyType1;
 import Entidades.HUD;
 import Entidades.Jugador;
 import Main.GamePanel;
@@ -20,6 +21,7 @@ public class Nivel1State extends GameState {
     private Background bg;
     private Jugador player;
     private HUD hud;
+    private EnemyType1 enemy;
     
     
     // EVENTOS
@@ -57,6 +59,10 @@ public class Nivel1State extends GameState {
         player = new Jugador(tileMap);
         player.setPosition(100, 400);
         
+        //init enemy
+        enemy = new EnemyType1(tileMap, player);
+        enemy.setPosition(200, 400);
+        
         //init HUD
         hud = new HUD(player);
         
@@ -78,6 +84,8 @@ public class Nivel1State extends GameState {
         
         player.draw(g);
         
+        enemy.draw(g);
+        
         hud.draw(g);
         
         //dibujando las transiciones
@@ -90,6 +98,7 @@ public class Nivel1State extends GameState {
     @Override
     public void update() {
         player.update();
+        enemy.update();
         
         //Actualizando la posicion del mapa dependiendo la del personaje Osmy
         tileMap.setPosition(GamePanel.WIDTH / 2 - player.getX(),

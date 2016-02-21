@@ -63,6 +63,8 @@ public abstract class Objeto {
     protected boolean boolDown;
     protected boolean boolJumping;
     protected boolean boolFalling;
+    protected boolean boolTouchedCeiling;
+    protected boolean boolTouchedGround;
     
     //Atributos de Movimiento
     protected double dMoveSpeed;
@@ -143,6 +145,8 @@ public abstract class Objeto {
             if(!boolTopLeft && !boolTopRight && (iCurrRow * iTileSize + iColHeight / 2) <= 50){
                 dDy = 0;
                 dYtemp = iCurrRow * iTileSize + iColHeight / 2;
+                boolTouchedCeiling = true;
+                boolTouchedGround = false;
             }
             else {
                 dYtemp += dDy;
@@ -154,6 +158,8 @@ public abstract class Objeto {
             if(boolTopLeft || boolTopRight) {
                 dDy = 0;
                 dYtemp = iCurrRow * iTileSize + iColHeight / 2;
+                boolTouchedCeiling = true;
+                boolTouchedGround = false;
             }
             else {
                 dYtemp += dDy;
@@ -166,6 +172,8 @@ public abstract class Objeto {
                 dDy = 0;
                 boolFalling = false;
                 dYtemp = (iCurrRow + 1) * iTileSize - iColHeight / 2;
+                boolTouchedGround = true;
+                boolTouchedCeiling = false;
             }
             else {
                 dYtemp += dDy;

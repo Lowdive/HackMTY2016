@@ -8,7 +8,7 @@ package Entidades.Enemigos;
 
 import Entidades.Animation;
 import Entidades.Enemigo;
-import Entidades._PERSONAJEPRINCIPAL_;
+import Entidades.Jugador;
 import Main.GamePanel;
 import TileMap.TileMap;
 import java.awt.Graphics2D;
@@ -24,10 +24,10 @@ import javax.imageio.ImageIO;
 public class EnemyType1 extends Enemigo {
     
     private BufferedImage[] sprites;
-    private _PERSONAJEPRINCIPAL_ osmy;
+    private Jugador osmy;
     private boolean boolActivo;
 
-    public EnemyType1(TileMap tm, _PERSONAJEPRINCIPAL_ o) {
+    public EnemyType1(TileMap tm, Jugador o) {
         super(tm);
         osmy = o;
         
@@ -36,6 +36,7 @@ public class EnemyType1 extends Enemigo {
         dMaxFallSpeed = 1.0;
         dFallSpeed = 0.1;
         dStopJumpSpeed = 0;
+        dDy = 5;
         
         iWidth = 60;
         iHeight = 90;
@@ -71,6 +72,15 @@ public class EnemyType1 extends Enemigo {
         
     }
     
+    private void getNextPosition() {
+        if (boolTouchedGround){
+            dDy = -5;
+        }
+        if (boolTouchedCeiling) {
+            dDy = 5;
+            boolTouchedGround = false;
+        }
+        }
     
     public void update() {
         
@@ -88,10 +98,9 @@ public class EnemyType1 extends Enemigo {
             }
         }
         
-        //hace el update de la posicion
-        //getNextPosition();
-        //checkTileMapCollision();
-        //setPosition(dXtemp, dYtemp);
+        getNextPosition();
+        checkTileMapCollision();
+        setPosition(dXtemp, dYtemp);
         
        
         //update de la animacion

@@ -8,7 +8,7 @@ package Entidades.Enemigos;
 
 import Entidades.Animation;
 import Entidades.Enemigo;
-import Entidades._PERSONAJEPRINCIPAL_;
+import Entidades.Jugador;
 import Main.GamePanel;
 import TileMap.TileMap;
 import java.awt.Graphics2D;
@@ -24,10 +24,10 @@ import javax.imageio.ImageIO;
 public class SpiritFire extends Enemigo {
     
     private BufferedImage[] sprites;
-    private _PERSONAJEPRINCIPAL_ osmy;
+    private Jugador osmy;
     private boolean boolActivo;
 
-    public SpiritFire(TileMap tm, _PERSONAJEPRINCIPAL_ o) {
+    public SpiritFire(TileMap tm, Jugador o) {
         super(tm);
         osmy = o;
         
@@ -71,6 +71,10 @@ public class SpiritFire extends Enemigo {
         
     }
     
+    private void getNextPosition() {
+        //movimiento
+        dDy += 10;
+        }
     
     public void update() {
         
@@ -89,9 +93,9 @@ public class SpiritFire extends Enemigo {
         }
         
         //hace el update de la posicion
-        //getNextPosition();
-        //checkTileMapCollision();
-        //setPosition(dXtemp, dYtemp);
+        getNextPosition();
+        checkTileMapCollision();
+        setPosition(dXtemp, dYtemp);
         
        
         //update de la animacion
