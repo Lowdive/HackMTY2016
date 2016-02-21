@@ -134,6 +134,21 @@ public abstract class Objeto {
         
         calculateCorners(iX,dYdest);
         
+        //Colision con "techo" si esta volando
+        if(dDy < 0) {
+            //se asimila al check de si está cayendo, pero al revés, este checa 
+            // si no está chocando con tiles hacia arriba y se sigue moviendo 
+            //hacia arriba, y llegara a pasar del límite superior del mapa, 
+            //detiene su aceleración.
+            if(!boolTopLeft && !boolTopRight && (iCurrRow * iTileSize + iColHeight / 2) <= 50){
+                dDy = 0;
+                dYtemp = iCurrRow * iTileSize + iColHeight / 2;
+            }
+            else {
+                dYtemp += dDy;
+            }
+        }
+        
         //Colision si esta brincando
         if(dDy < 0) {
             if(boolTopLeft || boolTopRight) {
