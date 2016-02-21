@@ -1,5 +1,6 @@
 package GameState;
 
+import Entidades.Enemigo;
 import Entidades.Enemigos.EnemyType1;
 import Entidades.HUD;
 import Entidades.Jugador;
@@ -21,8 +22,10 @@ public class Nivel1State extends GameState {
     private Background bg;
     private Jugador player;
     private HUD hud;
-    private EnemyType1 enemy;
     
+    //creando arraylist de enemigos
+    private ArrayList<Enemigo> arrEnemigos;
+            
     
     // EVENTOS
     /*Se utilizan eventos para poder dar instrucciones al usuario al inicio
@@ -55,13 +58,12 @@ public class Nivel1State extends GameState {
         bg = new Background("/Resources/Fondos/BGBetter.png", 1);
         bg.setVector(0, 0);
         
+        populateEnemies();
+        
         //init player
         player = new Jugador(tileMap);
         player.setPosition(100, 400);
         
-        //init enemy
-        enemy = new EnemyType1(tileMap, player);
-        enemy.setPosition(200, 400);
         
         //init HUD
         hud = new HUD(player);
@@ -74,6 +76,16 @@ public class Nivel1State extends GameState {
  
     }
     
+    private void populateEnemies() {
+        arrEnemigos = new ArrayList<Enemigo>();
+        EnemyType1 enemy;
+        
+        enemy = new EnemyType1(tileMap, player);
+        enemy.setPosition(200, 400);
+        arrEnemigos.add(enemy);
+                
+    }
+    
     @Override
     public void draw(Graphics2D g) {
         //Dibujando el background
@@ -84,7 +96,10 @@ public class Nivel1State extends GameState {
         
         player.draw(g);
         
-        enemy.draw(g);
+        //dibujando arrEnemigos
+        for (int i=0; i < arrEnemigos.size(); i++) {
+            arrEnemigos.get(i).draw(g);
+        }
         
         hud.draw(g);
         
@@ -98,8 +113,17 @@ public class Nivel1State extends GameState {
     @Override
     public void update() {
         player.update();
-        enemy.update();
         
+        //haciendo update de los enemigos
+        for (int i=0; i < arrEnemigos.size(); i++) {
+            Enemigo e = arrEnemigos.get(i);
+            e.update();
+            if(e.isDead()) {
+                arrEnemigos.remove(i);
+                i--;
+            }
+        }
+        player.checkAttack(arrEnemigos);
         //Actualizando la posicion del mapa dependiendo la del personaje Osmy
         tileMap.setPosition(GamePanel.WIDTH / 2 - player.getX(),
                 GamePanel.HEIGHT / 2 - player.getY());

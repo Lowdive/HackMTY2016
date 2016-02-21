@@ -84,12 +84,12 @@ public class EnemyType1 extends Enemigo {
     
     public void update() {
         
-        if(!boolActivo) {
-            if(Math.abs(osmy.getX() - iX) < GamePanel.WIDTH) {
-                boolActivo = true;
-            }
-            return;
-        }
+//        if(!boolActivo) {
+//            if(Math.abs(osmy.getX() - iX) < GamePanel.WIDTH) {
+//                boolActivo = true;
+//            }
+//            return;
+//        }
         //Checar el flinching
         if (boolFlinching) {
             long elapsed = (System.nanoTime() - longFlinchTimer) / 1000000;
